@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "my-message",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

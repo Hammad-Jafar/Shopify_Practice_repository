@@ -1,4 +1,13 @@
-<header>
+{%- liquid
+    if section.settings.menu.links.size  == blank
+      assign main_menu_linklist = linklists[section.settings.menu]
+    else
+      assign main_menu_linklist = section.settings.menu.links
+    endif
+  -%}
+<header x-cloack>
+  
+
   <h2 class="header__title">
     {{ shop.name | link_to: routes.root_url }}
   </h2>
@@ -8,17 +17,20 @@
       {{ link.title | link_to: link.url }}
     {% endfor %}
   </div>
-<div class="bg-red-500 text-white text-4xl font-bold p-8 text-center">
-  Tailwind is working! 🚀
-</div>
-{% for link in section.settings.menu.links %}
-  <p><strong>{{ link.title }}</strong></p>
-  <p>Children: {{ link.links.size }}</p>
+  <button x-on:click="searchOpen = !searchOpen" type="button" class="header__menu-toggle" aria-label="Toggle menu">
+    {% render 'icon-search' %}
+  </button>
+  <div class="bg-red-500 text-white text-4xl font-bold p-8 text-center">Tailwind is working! 🚀</div>
+  {% for link in section.settings.menu.links %}
+    <p>
+      <strong>{{ link.title }}</strong>
+    </p>
+    <p>Children: {{ link.links.size }}</p>
 
-  {% for child in link.links %}
-    <p>→ {{ child.title }}</p>
+    {% for child in link.links %}
+      <p>→ {{ child.title }}</p>
+    {% endfor %}
   {% endfor %}
-{% endfor %}
   <div class="header__icons">
     {% if shop.customer_accounts_enabled %}
       <shopify-account menu="{{ section.settings.customer_account_menu }}">

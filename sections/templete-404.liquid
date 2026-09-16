@@ -1,0 +1,30 @@
+<h1>{{ '404.title' | t }}</h1>
+<p>{{ '404.not_found' | t }}</p>
+<h3>{{ section.settings.title }}</h3>
+<p>{{ section.settings.description }}</p>
+{% schema %}
+  {
+    "name": "404-title",
+    "tag": "section",
+    "class": "flex flex-col items-center justify-center text-center py-7",
+    "settings": [
+      {
+      "type": "text",
+      "id": "title",
+      "label": "404 Title",
+      "default": "Oops! Page not found"
+      },
+      {
+        "type": "text",
+        "id": "description",
+        "label": "404 Description",
+        "default": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+    }
+    ],
+    "presets": [
+      {
+        "name": "404-title"
+      }
+    ]
+  }
+{% endschema %}

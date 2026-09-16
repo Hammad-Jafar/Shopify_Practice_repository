@@ -1,0 +1,37 @@
+<div>
+  <h2>Login</h2>
+  <form action="/account/login" method="post">
+    <input type="email" name="customer[email]" placeholder="Email" required>
+    <input type="password" name="customer[password]" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<script>
+  class LoginForm extends HTMLElement {
+    constructor() {
+      super();
+      this.form = this.querySelector('form');
+      this.form.addEventListener('submit', this.handleSubmit.bind(this));
+    }
+
+    async handleSubmit(event) {
+      event.preventDefault();
+      const formData = new FormData(this.form);
+      const response = await fetch(this.form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        window.location.href = '/account';
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Login failed. Please try again.');
+      }
+    }
+  }
+</script>

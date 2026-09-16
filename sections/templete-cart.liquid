@@ -1,0 +1,238 @@
+{% if cart.item_count > 0 %}
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-bold">
+      My Cart
+    </h1>
+
+    <p class="text-gray-500 mt-2">
+      {{ cart.item_count }}
+      item{% if cart.item_count != 1 %}s{% endif %}
+      in your cart
+    </p>
+  </div>
+
+  <form action="{{ routes.cart_url }}" method="post">
+
+    <div class="overflow-hidden rounded-xl border">
+
+      <table class="min-w-full">
+
+        <thead class="bg-gray-100">
+
+          <tr>
+
+            <th class="text-left px-6 py-4">
+              Product
+            </th>
+
+            <th class="text-center px-6 py-4">
+              Quantity
+            </th>
+
+            <th class="text-right px-6 py-4">
+              Total
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for item in cart.items %}
+
+          <tr class="border-t">
+
+            <td class="px-6 py-6">
+
+              <div class="flex gap-4">
+
+                {% if item.image %}
+
+                  <img
+                    src="{{ item.image | image_url: width: 150 }}"
+                    width="90"
+                    height="90"
+                    class="rounded border">
+
+                {% endif %}
+
+                <div>
+
+                  <h2 class="font-semibold">
+                    {{ item.product.title }}
+                  </h2>
+
+                  {% unless item.variant.title == 'Default Title' %}
+
+                    <p class="text-sm text-gray-500">
+                      {{ item.variant.title }}
+                    </p>
+
+                  {% endunless %}
+
+                  <p class="text-green-600 font-semibold mt-2">
+                    {{ item.final_price | money }}
+                  </p>
+
+                  <a
+                    href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity=0"
+                    class="text-red-600 text-sm">
+                    Remove
+                  </a>
+
+                </div>
+
+              </div>
+
+            </td>
+
+            <td class="text-center">
+
+              <input
+                type="number"
+                name="updates[]"
+                value="{{ item.quantity }}"
+                min="0"
+                class="border rounded w-20 px-2 py-2 text-center">
+
+            </td>
+
+            <td class="text-right px-6">
+
+              <strong>
+                {{ item.final_line_price | money }}
+              </strong>
+
+            </td>
+
+          </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="mt-10">
+
+      {% for block in section.blocks %}
+
+        <div {{ block.shopify_attributes }}>
+
+          {% case block.type %}
+
+                      {% when 'subtotal' %}
+
+            <div class="mb-6">
+
+              <h3 class="text-xl font-semibold">
+                Subtotal
+              </h3>
+
+              <p class="text-3xl font-bold text-green-600 mt-2">
+                {{ cart.total_price | money }}
+              </p>
+
+              <p class="text-gray-500 mt-2">
+                Taxes and shipping are calculated at checkout.
+              </p>
+
+            </div>
+
+          {% when 'update_cart_button' %}
+
+            <button
+              type="submit"
+              name="update"
+              class="px-8 py-3 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition font-semibold mr-4">
+              Update Cart
+            </button>
+
+          {% when 'checkout_button' %}
+
+            <button
+              type="submit"
+              name="checkout"
+              class="px-8 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition font-semibold">
+              Proceed to Checkout
+            </button>
+
+          {% endcase %}
+
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+  </form>
+
+</div>
+
+{% else %}
+
+<div class="max-w-xl mx-auto py-24 px-6">
+
+  <div class="bg-white rounded-2xl shadow-lg p-10 text-center">
+
+    <div class="text-6xl mb-6">
+      🛒
+    </div>
+
+    <h1 class="text-3xl font-bold">
+      Your Cart is Empty
+    </h1>
+
+    <p class="mt-4 text-gray-500">
+      Looks like you haven't added any products yet.
+    </p>
+
+    <a
+      href="{{ routes.all_products_collection_url }}"
+      class="inline-block mt-8 px-8 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+      Continue Shopping
+    </a>
+
+  </div>
+
+</div>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Template Cart",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "Subtotal",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "update_cart_button",
+      "name": "Update Cart Button",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "checkout_button",
+      "name": "Checkout Button",
+      "limit": 1,
+      "settings": []
+    }
+  ],
+  "presets": [
+    {
+      "name": "Template Cart"
+    }
+  ]
+}
+{% endschema %}

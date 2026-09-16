@@ -1,0 +1,43 @@
+{%- paginate block.article by section.settings.blog_post_limit -%}
+  {%- for item in array -%}
+    {%- if article.image -%}
+        <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.title }}"/>
+        {%- else -%}
+            {{ "image" | placeholder_svg_tag }}
+        
+    {%- endif -%}
+    <h1>{{article.title}}</h1>
+    {%- if article.excerpt.size > 0 -%}
+{%- else -%}
+    <p>{{ article.content | strip_html | truncatewords:15 }}</p>
+        
+    {%- endif -%}
+  {%- endfor -%}
+  
+  {{- paginate | default_pagination -}}
+{%- endpaginate -%}
+
+{% schema %}
+  {
+    "name": "blog",
+    "tag": "section",
+    "settings": [
+        {
+          "type": "range",
+          "id": "blog_post_limit",
+          "label": "Blog post limit",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 3
+        }
+    ],
+    "presets": [
+      {
+        "name": "blog",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

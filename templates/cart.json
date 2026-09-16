@@ -10,8 +10,27 @@
 {
   "sections": {
     "main": {
-      "type": "cart",
-      "settings": {}
+      "type": "templete-cart",
+      "blocks": {
+        "subtotal": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "update_cart_button": {
+          "type": "update_cart_button",
+          "settings": {}
+        },
+        "checkout_button": {
+          "type": "checkout_button",
+          "settings": {}
+        } 
+      },
+      "settings": {},
+      "order": [
+        "subtotal",
+        "update_cart_button",
+        "checkout_button"
+      ]
     }
   },
   "order": [

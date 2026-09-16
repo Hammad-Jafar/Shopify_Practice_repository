@@ -1,0 +1,348 @@
+<article
+  class="py-8"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+
+  <!-- Main Entity -->
+  <meta
+    itemprop="mainEntityOfPage"
+    content="{{ shop.url }}{{ article.url }}"
+  >
+
+  <!-- Modified Date -->
+  <meta
+    itemprop="dateModified"
+    content="{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+  >
+
+  <!-- Publisher -->
+  <div
+    itemprop="publisher"
+    itemscope
+    itemtype="https://schema.org/Organization"
+  >
+
+    <meta itemprop="name" content="{{ shop.name }}">
+
+    {% if settings.logo %}
+      <div
+        itemprop="logo"
+        itemscope
+        itemtype="https://schema.org/ImageObject"
+      >
+        <meta
+          itemprop="url"
+          content="{{ settings.logo | image_url: width: 600 }}"
+        >
+      </div>
+    {% endif %}
+
+  </div>
+
+  {% for block in section.blocks %}
+
+    <div {{ block.shopify_attributes }}>
+
+      {% case block.type %}
+
+      {% when 'article-title' %}
+
+        {% if section.settings.enable_title %}
+
+          <h1 itemprop="headline">
+            {{ article.title }}
+          </h1>
+
+        {% endif %}
+
+        <div
+          itemprop="author"
+          itemscope
+          itemtype="https://schema.org/Person"
+        >
+
+          <meta
+            itemprop="url"
+            content="{{ shop.url }}"
+          >
+
+          <span itemprop="name">
+            {{ article.author }}
+          </span>
+
+        </div>
+
+        <p>
+
+          Published on
+
+          <time
+            itemprop="datePublished"
+            datetime="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+          >
+
+            {{ article.published_at | date: "%B %d, %Y" }}
+
+          </time>
+
+        </p>
+
+      {% when 'article-image' %}
+
+        {% if article.image %}
+
+          <div
+            itemprop="image"
+            itemscope
+            itemtype="https://schema.org/ImageObject"
+          >
+
+            {{
+              article.image
+              | image_url: width: 1200
+              | image_tag:
+                loading: 'lazy',
+                alt: article.image.alt
+            }}
+
+            <meta
+              itemprop="url"
+              content="{{ article.image | image_url: width: 1200 }}"
+            >
+
+            <meta
+              itemprop="width"
+              content="{{ article.image.width }}"
+            >
+
+            <meta
+              itemprop="height"
+              content="{{ article.image.height }}"
+            >
+
+          </div>
+
+        {% endif %}
+
+      {% when 'article-content' %}
+
+        <div
+          class="article-content"
+          itemprop="articleBody"
+        >
+
+          {{ article.content }}
+
+        </div>
+
+      {% endcase %}
+
+    </div>
+
+  {% endfor %}
+
+ {% if article.comments_enabled? %}
+
+  <div class="article-comments mt-10">
+
+    <h2>Comments ({{ article.comments_count }})</h2>
+
+    {% if article.comments_count > 0 %}
+
+      {% for comment in article.comments %}
+
+        <div
+          class="comment py-4 border-b"
+          itemprop="comment"
+          itemscope
+          itemtype="https://schema.org/Comment"
+        >
+
+          <p>
+
+            <span
+              itemprop="author"
+              itemscope
+              itemtype="https://schema.org/Person"
+            >
+              <strong itemprop="name">
+                {{ comment.author }}
+              </strong>
+            </span>
+
+            <br>
+
+            <small>
+
+              <time
+                itemprop="datePublished"
+                datetime="{{ comment.created_at | date: '%Y-%m-%dT%H:%M:%S%z' }}"
+              >
+                {{ comment.created_at | date: "%B %d, %Y at %I:%M %p" }}
+              </time>
+
+            </small>
+
+          </p>
+
+          <div itemprop="text">
+            {{ comment.content }}
+          </div>
+
+        </div>
+
+      {% endfor %}
+
+    {% else %}
+
+      <p>No comments yet. Be the first to comment!</p>
+
+    {% endif %}
+
+    <hr class="my-8">
+
+    <h3>Leave a Comment</h3>
+
+    {% form 'new_comment', article %}
+
+      {% if form.posted_successfully? %}
+
+        {% if blog.moderated? %}
+          <p>Your comment has been submitted and is awaiting approval.</p>
+        {% else %}
+          <p>Your comment was posted successfully.</p>
+        {% endif %}
+
+      {% endif %}
+
+      {{ form.errors | default_errors }}
+
+      <div>
+        <label for="CommentAuthor">Name</label><br>
+
+        <input
+          id="CommentAuthor"
+          type="text"
+          name="comment[author]"
+          value="{{ form.author }}"
+          required
+        >
+      </div>
+
+      <br>
+
+      <div>
+        <label for="CommentEmail">Email</label><br>
+
+        <input
+          id="CommentEmail"
+          type="email"
+          name="comment[email]"
+          value="{{ form.email }}"
+          required
+        >
+      </div>
+
+      <br>
+
+      <div>
+        <label for="CommentBody">Comment</label><br>
+
+        <textarea
+          id="CommentBody"
+          name="comment[body]"
+          rows="6"
+          required
+        >{{ form.body }}</textarea>
+      </div>
+
+      <br>
+
+      <button type="submit">
+        Post Comment
+      </button>
+
+    {% endform %}
+
+  </div>
+
+{% endif %}
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BlogPosting",
+  "headline": {{ article.title | json }},
+  "image": [
+    "{{ article.image | image_url: width: 1200 }}"
+  ],
+  "author":{
+    "@type":"Person",
+    "name": {{ article.author | json }},
+    "url":"{{ shop.url }}"
+  },
+  "publisher":{
+    "@type":"Organization",
+    "name": {{ shop.name | json }},
+    "logo":{
+      "@type":"ImageObject",
+      "url":"{{ settings.logo | image_url: width: 600 }}"
+    }
+  },
+  "datePublished":"{{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  "dateModified":"{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+  "mainEntityOfPage":"{{ shop.url }}{{ article.url }}"
+}
+</script>
+
+</article>
+
+{% schema %}
+{
+  "name": "Template Article",
+  "tag": "section",
+  "class": "article-template",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_title",
+      "label": "Show article title",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article-title",
+      "name": "Article Title",
+      "limit": 1
+    },
+    {
+      "type": "article-image",
+      "name": "Article Image",
+      "limit": 1
+    },
+    {
+      "type": "article-content",
+      "name": "Article Content",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Template Article",
+      "blocks": [
+        {
+          "type": "article-title"
+        },
+        {
+          "type": "article-image"
+        },
+        {
+          "type": "article-content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

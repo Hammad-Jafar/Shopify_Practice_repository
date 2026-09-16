@@ -1,0 +1,43 @@
+<div class="w-full bg-gray-100 px-4 py-16 text-center">
+
+  <h2 class="text-3xl font-bold">
+    {{ section.settings.heading }}
+  </h2>
+
+  <p class="mt-4 text-lg">
+    Current time:
+    {{ 'now' | date: '%Y-%m-%d %H:%M:%S' }}
+  </p>
+
+  <p class="mt-2 text-sm">
+    Section ID: {{ section.id }}
+  </p>
+
+  <button
+    type="button"
+    id="refresh-message"
+    class="mt-6 rounded-lg bg-black px-6 py-3 text-white"
+  >
+    Refresh Section
+  </button>
+
+</div>
+
+{% schema %}
+{
+  "name": "My Message",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hello Shopify!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "My Message"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "templete-customer-addresses",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

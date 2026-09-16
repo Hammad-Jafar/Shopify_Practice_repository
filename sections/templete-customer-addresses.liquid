@@ -1,0 +1,476 @@
+<div class="max-w-6xl mx-auto px-4 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+
+    <h1 class="text-3xl font-bold">
+      Customer Addresses
+    </h1>
+
+    <div class="flex gap-3">
+
+      <a
+        href="#add-address"
+        class="px-5 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition"
+      >
+        Create Address
+      </a>
+
+      <a
+        href="{{ routes.account_url }}"
+        class="px-5 py-3 bg-gray-100 rounded-md hover:bg-gray-200 transition"
+      >
+        Back to Account
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <!-- CREATE NEW ADDRESS -->
+  <div
+    id="add-address"
+    class="border border-gray-200 rounded-xl p-6 mb-10"
+  >
+
+    <h2 class="text-2xl font-semibold mb-6">
+      Create Address
+    </h2>
+
+    {% assign new_address = customer.new_address %}
+
+    {% form 'customer_address', new_address, id: 'AddressNewForm' %}
+
+      {% if form.errors %}
+        <div class="mb-6 p-4 border border-red-300 bg-red-50 rounded-md">
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <!-- First Name -->
+        <div>
+          <label
+            for="AddressFirstNameNew"
+            class="block mb-2 font-medium"
+          >
+            First Name
+          </label>
+
+          <input
+            type="text"
+            id="AddressFirstNameNew"
+            name="address[first_name]"
+            autocomplete="given-name"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Last Name -->
+        <div>
+          <label
+            for="AddressLastNameNew"
+            class="block mb-2 font-medium"
+          >
+            Last Name
+          </label>
+
+          <input
+            type="text"
+            id="AddressLastNameNew"
+            name="address[last_name]"
+            autocomplete="family-name"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Company -->
+        <div class="md:col-span-2">
+          <label
+            for="AddressCompanyNew"
+            class="block mb-2 font-medium"
+          >
+            Company
+          </label>
+
+          <input
+            type="text"
+            id="AddressCompanyNew"
+            name="address[company]"
+            autocomplete="organization"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Address -->
+        <div class="md:col-span-2">
+          <label
+            for="AddressAddress1New"
+            class="block mb-2 font-medium"
+          >
+            Address
+          </label>
+
+          <input
+            type="text"
+            id="AddressAddress1New"
+            name="address[address1]"
+            autocomplete="address-line1"
+            required
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Apartment -->
+        <div class="md:col-span-2">
+          <label
+            for="AddressAddress2New"
+            class="block mb-2 font-medium"
+          >
+            Apartment, suite, etc.
+          </label>
+
+          <input
+            type="text"
+            id="AddressAddress2New"
+            name="address[address2]"
+            autocomplete="address-line2"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- City -->
+        <div>
+          <label
+            for="AddressCityNew"
+            class="block mb-2 font-medium"
+          >
+            City
+          </label>
+
+          <input
+            type="text"
+            id="AddressCityNew"
+            name="address[city]"
+            autocomplete="address-level2"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Postal Code -->
+        <div>
+          <label
+            for="AddressZipNew"
+            class="block mb-2 font-medium"
+          >
+            Postal Code
+          </label>
+
+          <input
+            type="text"
+            id="AddressZipNew"
+            name="address[zip]"
+            autocomplete="postal-code"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Country -->
+        <div>
+          <label
+            for="AddressCountryNew"
+            class="block mb-2 font-medium"
+          >
+            Country
+          </label>
+
+          <select
+            id="AddressCountryNew"
+            name="address[country]"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+            {{ all_country_option_tags }}
+          </select>
+        </div>
+
+
+        <!-- Province -->
+        <div
+          id="AddressProvinceContainerNew"
+          style="display: none;"
+        >
+          <label
+            for="AddressProvinceNew"
+            class="block mb-2 font-medium"
+          >
+            Province / State
+          </label>
+
+          <select
+            id="AddressProvinceNew"
+            name="address[province]"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+          </select>
+        </div>
+
+
+        <!-- Phone -->
+        <div class="md:col-span-2">
+          <label
+            for="AddressPhoneNew"
+            class="block mb-2 font-medium"
+          >
+            Phone
+          </label>
+
+          <input
+            type="tel"
+            id="AddressPhoneNew"
+            name="address[phone]"
+            autocomplete="tel"
+            class="w-full border border-gray-300 rounded-md px-4 py-3"
+          >
+        </div>
+
+
+        <!-- Default Address -->
+        <div class="md:col-span-2 flex items-center gap-3">
+
+          <input
+            type="checkbox"
+            id="AddressDefaultNew"
+            name="address[default]"
+            value="1"
+            class="w-4 h-4"
+          >
+
+          <label
+            for="AddressDefaultNew"
+            class="font-medium"
+          >
+            Set as default address
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="mt-6 px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition"
+      >
+        Add Address
+      </button>
+
+    {% endform %}
+
+  </div>
+
+
+  <!-- EXISTING ADDRESSES -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for address in customer.addresses %}
+
+      <div
+        id="Address{{ address.id }}"
+        class="relative border border-gray-200 rounded-xl p-6 shadow-sm"
+      >
+
+        {% if address == customer.default_address %}
+          <span class="absolute top-4 right-4 bg-black text-white text-xs px-3 py-1 rounded-full">
+            Default
+          </span>
+        {% endif %}
+
+
+        <h3 class="text-lg font-semibold mb-4">
+          {{ address.first_name }}
+          {{ address.last_name }}
+        </h3>
+
+
+        <div class="space-y-2 text-gray-600">
+
+          {% if address.company != blank %}
+            <p>{{ address.company }}</p>
+          {% endif %}
+
+          {% if address.address1 != blank %}
+            <p>{{ address.address1 }}</p>
+          {% endif %}
+
+          {% if address.address2 != blank %}
+            <p>{{ address.address2 }}</p>
+          {% endif %}
+
+          {% if address.city != blank or address.province != blank or address.zip != blank %}
+            <p>
+              {{ address.city }}
+              {% if address.province != blank %}
+                {% if address.city != blank %}, {% endif %}
+                {{ address.province }}
+              {% endif %}
+              {% if address.zip != blank %}
+                {{ address.zip }}
+              {% endif %}
+            </p>
+          {% endif %}
+
+          {% if address.country != blank %}
+            <p>{{ address.country }}</p>
+          {% endif %}
+
+          {% if address.phone != blank %}
+            <p>{{ address.phone }}</p>
+          {% endif %}
+
+        </div>
+
+
+        <!-- Delete Address -->
+        <form
+          method="post"
+          action="{{ routes.account_addresses_url }}/{{ address.id }}"
+          class="mt-6"
+          onsubmit="return confirm('Are you sure you want to delete this address?');"
+        >
+
+          <input
+            type="hidden"
+            name="_method"
+            value="delete"
+          >
+
+          <button
+            type="submit"
+            class="px-4 py-2 border border-red-300 text-red-600 rounded-md hover:bg-red-50 transition"
+          >
+            Delete
+          </button>
+
+        </form>
+
+      </div>
+
+
+    {% else %}
+
+      <div class="col-span-full text-center py-10">
+
+        <p class="text-gray-500">
+          No addresses found.
+        </p>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
+
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const countrySelect = document.getElementById(
+      'AddressCountryNew'
+    );
+
+    const provinceSelect = document.getElementById(
+      'AddressProvinceNew'
+    );
+
+    const provinceContainer = document.getElementById(
+      'AddressProvinceContainerNew'
+    );
+
+    if (!countrySelect || !provinceSelect) {
+      return;
+    }
+
+
+    function updateProvinces() {
+
+      const selectedOption =
+        countrySelect.options[countrySelect.selectedIndex];
+
+      if (!selectedOption) {
+        return;
+      }
+
+      let provinces = [];
+
+      try {
+
+        const provinceData =
+          selectedOption.getAttribute('data-provinces');
+
+        provinces = provinceData
+          ? JSON.parse(provinceData)
+          : [];
+
+      } catch (error) {
+
+        provinces = [];
+
+      }
+
+
+      provinceSelect.innerHTML = '';
+
+
+      if (provinces.length > 0) {
+
+        provinceContainer.style.display = 'block';
+
+        provinces.forEach(function (province) {
+
+          const option =
+            document.createElement('option');
+
+          option.value = province[0];
+          option.textContent = province[0];
+
+          provinceSelect.appendChild(option);
+
+        });
+
+      } else {
+
+        provinceContainer.style.display = 'none';
+
+      }
+
+    }
+
+
+    countrySelect.addEventListener(
+      'change',
+      updateProvinces
+    );
+
+    updateProvinces();
+
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Customer Addresses",
+  "settings": []
+}
+{% endschema %}
